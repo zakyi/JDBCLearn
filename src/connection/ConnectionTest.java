@@ -1,5 +1,7 @@
 package connection;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -62,6 +64,43 @@ public class ConnectionTest {
         System.out.println("connection3: "+ conn );
     }
 
+    //方式4:只加载驱动, 不需要注册驱动
+    public static void testConnection4() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
+
+
+        //1. 提供三种基本信息
+        String url = "jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC";
+        String user = "root";
+        String password = "981213";
+
+        //2.加载驱动, 加载时会自动注册驱动
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        //获取连接
+        Connection conn = DriverManager.getConnection(url, user, password);
+        System.out.println("connection4: "+ conn );
+    }
+
+    //方式5:创建配置文件
+    public static void testConnection5() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException {
+        //1. 提供基本信息
+        InputStream inputStream = ConnectionTest.class.getClassLoader().getResourceAsStream("jdbc.properties");
+        Properties properties = new Properties();
+        properties.load(inputStream);
+
+        String user = properties.getProperty("user");
+        String password = properties.getProperty("password");
+        String url = properties.getProperty("url");
+        String driverClass = properties.getProperty("driverClass");
+
+        //2.加载驱动, 加载时会自动注册驱动
+        Class.forName(driverClass);
+
+        //获取连接
+        Connection conn = DriverManager.getConnection(url, user, password);
+        System.out.println("connection5: "+ conn );
+    }
+
     public static void main(String[] args) {
         try {
             testConnection1();
@@ -93,5 +132,30 @@ public class ConnectionTest {
             e.printStackTrace();
         }
 
+        try {
+            testConnection4();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            testConnection5();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
