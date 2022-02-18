@@ -7,6 +7,7 @@ public class TestCRUD {
     /**
      * 通用的增删改操作
      */
+
     public static void update(String sql, Object ...args){//可变数量的参数
         Connection conn = null;
         PreparedStatement ps= null;
@@ -22,13 +23,20 @@ public class TestCRUD {
             }
 
             //4.执行sql
+            /*
+             * ps.execute();
+             * 若执行查询,有返回结果,则此方法返回true
+             * 若执行增删改,没有返回结果,则此方法返回false
+             */
             ps.execute();
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally{
             //关闭连接
             util.JDBCUtils.closeResource(conn,ps);
         }
+
     }
 
     /**
