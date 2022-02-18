@@ -47,12 +47,14 @@ public class Exer1Test {
 
             //4.执行sql
             /*
-             * ps.execute();
+             * 方式1:ps.execute();
              * 若执行查询,有返回结果,则此方法返回true
              * 若执行增删改,没有返回结果,则此方法返回false
              */
             //ps.execute();
+
             /*
+            方式2:ps.executeUpdate()
             返回0,表示影响行数为0
             返回n,表示影响行数为n
              */
